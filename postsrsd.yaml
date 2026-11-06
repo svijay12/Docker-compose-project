@@ -1,12 +1,12 @@
 services:
   postfix:
-    image: boky/postfix
+    image: redcap/postfix
     hostname: mail.example.com
     depends_on:
       - postsrsd
 
   postsrsd:
-    image: crazymax/postsrsd:latest
+    image: redcap/postsrsd:latest
     environment:
       - SRS_DOMAIN=example.com
       - SRS_SECRET=change-me-to-a-long-random-secret
