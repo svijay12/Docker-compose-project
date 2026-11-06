@@ -12,3 +12,8 @@ EXPOSE 10001/tcp
 EXPOSE 10002/tcp
 
 VOLUME ["/config"]
+
+ports:
+      - http://localhost:10001
+      
+    restart: unless-stopped
