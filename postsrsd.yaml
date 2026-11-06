@@ -1,0 +1,15 @@
+services:
+  postfix:
+    image: boky/postfix
+    hostname: mail.example.com
+    depends_on:
+      - postsrsd
+
+  postsrsd:
+    image: crazymax/postsrsd:latest
+    environment:
+      - SRS_DOMAIN=example.com
+      - SRS_SECRET=change-me-to-a-long-random-secret
+    expose:
+      - "10001"
+      - "10002"
