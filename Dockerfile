@@ -1,30 +1,15 @@
-FROM ubuntu:bookworm-slim
+FROM ghcr.io/linuxserver/baseimage-alpine:3.16
 
-RUN apt-get update && \
-    apt-get install -y \
-      ca-certificates \
-      cmake \
-      gcc \
-      g++ \
-      git \
-      libconfuse-dev \
-      libssl-dev \
-      make && \
-    rm -rf /var/lib/apt/lists/*
+ARG POSTSRSD_PACKAGE_VERSION=1.11-r0
+RUN apk add --no-cache postsrsd=$POSTSRSD_PACKAGE_VERSION
 
-RUN git clone https://github.com/svijay12/Docker-compose-project.git
+ENV SRS_DOMAIN set-this-to-yourdomain.example.com
 
-WORKDIR /src
+COPY root/ /
 
-RUN cmake -B build \
- && cmake --build build \
- && cmake --install build
+# forward SRS lookup
+EXPOSE 10001/tcp
+# reverse SRS lookup
+EXPOSE 10002/tcp
 
-RUN mkdir -p /etc/postsrsd
-
-COPY postsrsd.conf /etc/postsrsd/postsrsd.conf
-COPY secrets /etc/postsrsd/secrets
-
-EXPOSE 10001 10002
-
-CMD ["/usr/local/sbin/postsrsd","-f","/etc/postsrsd/postsrsd.conf"]
+VOLUME ["/config"]
